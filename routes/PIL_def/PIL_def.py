@@ -15,7 +15,7 @@ def decoding(image):
     return image
     
 
-def set_card(이름):
+def set_card():
     W = 1050
     H = 600
     bg_color = 'rgb(255, 255, 255)'
