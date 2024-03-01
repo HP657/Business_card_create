@@ -7,10 +7,10 @@
 <body>
     입장
     <form action="/login" method="POST">
-        <input type="text" placeholder="이름"><br>
-        <input type="password" placeholder="비밀번호">
-        <button>들어가기</button>
-        <a href="/signup">회원가입하기</a>
+        <input type="text" name="username" placeholder="사용자 이름"><br>
+        <input type="password" name="password" placeholder="비밀번호"><br>
+        <button type="submit">로그인</button>
     </form>
+    <a href="/signup">회원가입하기</a>
 </body>
 </html>
