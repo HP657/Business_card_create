@@ -5,6 +5,7 @@
     <title>명합 제작</title>
 </head>
 <body>
+    {% if not logged_in %}
     입장
     <form action="/login" method="POST">
         <input type="text" name="username" placeholder="사용자 이름"><br>
@@ -12,5 +13,20 @@
         <button type="submit">로그인</button>
     </form>
     <a href="/signup">회원가입하기</a>
+    {% else %}
+    hi<br>
+    <a href="/logout">나기기</a>
+    {% endif %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
 </body>
 </html>

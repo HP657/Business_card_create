@@ -1,10 +1,13 @@
-from flask import Blueprint, render_template, redirect, url_for, request, session, flash
+from flask import *
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from .create_card import set_card
 from pool.database import DB
 import os
+from dotenv import load_dotenv
 
 main_bp = Blueprint('main_bp', __name__)
+
+load_dotenv()
 
 # 데이터베이스 연결
 db = DB(
@@ -13,11 +16,12 @@ db = DB(
     os.getenv("DB_PW")
 )
 
-# 회원 관리 함수
-
 @main_bp.route('/')
 def main():
-    return render_template('index.html')
+    if 'token' in session:  # 세션에 토큰이 있는지 확인
+        return render_template('index.html', logged_in=True)  # 로그인 상태를 템플릿에 전달
+    else:
+        return render_template('index.html', logged_in=False)
 
 @main_bp.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -36,25 +40,26 @@ def signup():
             message = "공유 비밀번호가 일치하지 않습니다."
         else:
             # 회원 가입 처리
-            db.add_user(name, password)  # 예시: 데이터베이스에 사용자 추가
+            db.add_user(name, password, confirm_password)  # 예시: 데이터베이스에 사용자 추가
             return redirect(url_for('main_bp.main'))
 
     return render_template('signup.html', message=message)
 
-@main_bp.route('/login', methods=['GET', 'POST'])
+@main_bp.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    username = request.form['username']
+    password = request.form['password']
 
-        # 사용자 인증 처리
-        if db.authenticate_user(username, password):  # 예시: 사용자 인증
-            access_token = create_access_token(identity=username)
-            session['access_token'] = access_token
-            return redirect(url_for('main_bp.profile'))
+    user = db.get_user(username, password)  # 사용자 정보 확인
 
-    return redirect(url_for('main_bp.main'))
-
+    if user:
+        token = create_access_token(identity=username)
+        session['token'] = token  # 토큰을 세션에 저장
+        return redirect(url_for('main_bp.main'))  # 메인 페이지로 리다이렉트
+    else:
+        flash('회원 정보가 없습니다.')
+        return redirect(url_for('main_bp.main'))
+    
 @main_bp.route('/logout')
 def logout():
     session.clear()

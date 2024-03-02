@@ -1,25 +1,21 @@
+# app.py
+
 from flask import Flask
 from flask_jwt_extended import JWTManager
+from routes.main import main_bp
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+app = Flask(__name__)
 
-def create_app():
-    app = Flask(__name__)
+# JWT 설정
+app.config['JWT_SECRET_KEY'] = os.getenv("KEY")
+app.config['SECRET_KEY'] = os.getenv("KEY")
 
-    # JWT 시크릿 키 설정
-    app.config['JWT_SECRET_KEY'] = os.getenv("JWT_KEY")
+# 블루프린트 등록
+app.register_blueprint(main_bp)
 
-    # 블루프린트 등록
-    from routes.main import main_bp
-    app.register_blueprint(main_bp)
-
-    # JWTManager 초기화
-    jwt = JWTManager(app)
-
-    return app
+# JWTManager 초기화
+jwt = JWTManager(app)
 
 if __name__ == "__main__":
-    app = create_app()
     app.run(debug=True)
