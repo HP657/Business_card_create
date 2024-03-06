@@ -33,6 +33,7 @@ def signup():
         confirm_password = request.form['confirm_password']
         share_password = request.form['share_password']
         confirm_share_password = request.form['confirm_share_password']
+        image = set_card()
 
         if password != confirm_password:
             message = "비밀번호가 일치하지 않습니다."
@@ -40,7 +41,7 @@ def signup():
             message = "공유 비밀번호가 일치하지 않습니다."
         else:
             # 회원 가입 처리
-            db.add_user(name, password, confirm_password)  # 예시: 데이터베이스에 사용자 추가
+            db.add_user(name, password, confirm_password, image)  # 예시: 데이터베이스에 사용자 추가
             return redirect(url_for('main_bp.main'))
 
     return render_template('signup.html', message=message)
@@ -65,11 +66,6 @@ def logout():
     session.clear()
     return redirect(url_for('main_bp.main'))
 
-@main_bp.route('/aa')
-@jwt_required()
-def aa():
-    encoded_image = set_card()
-    return render_template('view_card.html', encoded_image=encoded_image)
 
 @main_bp.route('/profile')
 @jwt_required()

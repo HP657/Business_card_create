@@ -14,7 +14,10 @@
     </form>
     <a href="/signup">회원가입하기</a>
     {% else %}
-    hi<br>
+    <form action="/mak_card" method="POST">
+        
+        <button type="submit">만들기</button>
+    </form>
     <a href="/logout">나기기</a>
     {% endif %}
 
