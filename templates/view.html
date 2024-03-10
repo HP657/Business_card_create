@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뷰카드</title>
+</head>
+<body>
+    {% if not img %}
+    <h3> 생성</h3>
+    <form action="/create_card" method="post">
+        직군: <input type="text" name="jon" required><br>
+        이름: <input type="text" name="ko_name" required><br>
+        영어이름: <input type="text" name="en_name" required><br>
+        전화번호: <input type="text" name="tel" required><br>
+        이메일: <input type="email" name="email" required><br>
+        <button type="submit">명함 만들기</button>
+    </form>
+    {% else %}
+    <img src="data:image/png;base64,{{ encoded_image }}" alt="Image">
+    {% endif %}
+</body>
+</html>

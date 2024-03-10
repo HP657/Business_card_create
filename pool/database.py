@@ -22,10 +22,8 @@ class DB:
         if user_data.rowcount == 0:  # 사용자 정보가 없는 경우
             return None
         else:
-            return user_data.fetchone()  # 사용자 정보가 있는 경우, 사용자 정보 반환p
-
-    
-
+            return user_data.fetchone()  # 사용자 정보가 있는 경우, 사용자 정보 반환
+        
 
 
 
